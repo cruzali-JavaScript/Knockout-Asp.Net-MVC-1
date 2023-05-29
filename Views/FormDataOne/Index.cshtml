@@ -1,0 +1,50 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<h2>Ejemplo uso de Axios para enviar Form Data a una API</h2>
+
+<form id="form">
+    <div class="form-control">
+        <label for="name">Escriba su nombre</label>
+        <input type="text" required name="name" id="" />
+        <label for="username">Nombre de usuario</label>
+        <input type="text" name="username" required id="" />
+    </div>
+    <div class="form-control">
+        <label for="image">Seleccione una imagen</label>
+        <input type="file" name="image" required id="" />
+        <button>Enviar</button>
+    </div>
+</form>
+
+<script type="text/javascript">
+    let form = document.getElementById('form');
+    //form.addEventListener('submit', (e) => {
+    // Async
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        // construct formdata object
+        let formData = new FormData(form);
+
+        formData.append('id', Date.now());
+
+        // perform post request using axios
+
+        //axios.post("https://httpbin.org/post", formData)
+        //    .then((res) => console.log(res))
+        //    .catch((err) => console.log(err))
+
+        // ASYNC
+          try {
+              let res = await axios.post("https://httpbin.org/post", formData);
+              console.log(res);
+          } catch (err) {
+              console.log(err);
+          }          
+      })
+
+</script>

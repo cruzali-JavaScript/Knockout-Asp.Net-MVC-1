@@ -1,0 +1,55 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<div class="row">
+    <p>https://www.youtube.com/watch?v=5qQvtKZf91k&ab_channel=CodersMedia</p>
+</div>
+
+<div class="row">
+    <table class="table">
+        <thead>
+            <tr>
+                <td>Name</td>
+                <td>Degree</td>
+                <td>Percentage</td>
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: students">
+            <tr>
+                <td data-bind="text: name"></td>
+                <td data-bind="text: details().degree"></td>
+                <td data-bind="text: details().percent"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="~/Scripts/knockout-3.5.1.js"></script>
+<script type="text/javascript">
+    function studentModel(name, details)
+    {
+        var self = this;
+        self.name = name;
+        self.details = ko.observable(details);
+    };
+
+    function studentFactory()
+    {
+        var self = this;
+        self.details = [
+            { degree: "B.E", percent: 75 },
+            { degree: "M.E", percent: 85 },
+            { degree: "MS", percent: 65 },
+        ];
+        self.students = ko.observableArray([
+            new studentModel("johnson", self.details[0]),
+            new studentModel("henry", self.details[2])
+        ]);
+    };
+
+    ko.applyBindings(new studentFactory());
+</script>

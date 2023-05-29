@@ -1,0 +1,41 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Fetch Data</h2>
+
+<script type="text/javascript">
+
+
+
+    //fetch('https://picsum.photos/300/300')
+    fetch('/Data/Libro1.csv')
+        .then(res => res.blob())
+        //.then(blob => console.log(blob));
+        .then(blob => {
+
+            //readFile(blob);
+
+            const file = new File([blob], 'csv', { type: blob.type });
+
+            readFile(file);
+        });
+
+    function readFile(input)
+    {
+        const fr = new FileReader();
+        fr.readAsDataURL(input);
+
+        fr.addEventListener('load', () => {
+            const res = fr.result;
+            console.log(res);
+        });
+    }
+
+        
+
+</script>
+
+
+

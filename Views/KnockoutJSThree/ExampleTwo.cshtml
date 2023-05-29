@@ -1,0 +1,62 @@
+﻿
+@{
+    ViewBag.Title = "ExampleTwo";
+}
+
+<h2>ExampleTwo</h2>
+
+<div class="row">
+    <div id="knockout-app" class="card">
+        <header>
+            Ali Cruz
+        </header>
+
+        <div class="card-section">
+            <h2>Fabrica de juguetes</h2>
+            <p>Esto es un conjunto que tenemos para trabajar</p>
+
+            <button>+ Agregar juguete</button>
+            <ul class="counter-ui-container" data-bind="foreach: inventory">
+                <li>
+                    <span>
+                        <span data-bind="class: $data.icon"></span>
+                        <span data-bind="class: $data.text"></span>
+                    </span>
+                    <span>
+                        <button>&times; </button>
+                    </span>
+                </li>
+            </ul>
+        </div>
+        <footer>
+            <span>Adios</span>
+        </footer>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function InventoryViewModel()
+    {
+        var self = this;
+
+        var iconTypes = [
+            { icon: "icon-bone", text: "Bone" },
+            { icon: "icon-ball", text: "Ball" },
+            { icon: "icon-circle", text: "Circle" },
+            { icon: "icon-rabbit", text: "Rabbit" }
+        ]
+
+        self.inventory = ko.observableArray([
+        ]);
+
+        self.addItem = function ()
+        {
+            var index = Math.floor(Math.random())
+
+        }
+    };
+
+    const knockoutApp = document.querySelector("#knockout-app");
+    ko.applyBindings(new InventoryViewModel(), knockoutApp);
+
+</script>

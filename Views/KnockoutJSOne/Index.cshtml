@@ -1,0 +1,114 @@
+﻿
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Knockout js uso basico Observables - </title>
+    <h3>Ejemplo básico de uso Knockout JS</h3>    
+</head>
+<body>
+    <div class="row">
+        <p>Fuente: https://www.youtube.com/watch?v=hHJxP9zll14&ab_channel=LatamMicrosoft </p>
+    </div>
+
+    <div class="row jumbotron">
+        <p>
+            Nombre: 
+            <input type="text" data-bind="value: firstName, valueUpdate: 'afterkeydown'" />
+            <span data-bind="visible: firstName.hasError, text: firstName.validationMessage"></span>
+        </p>
+        <p>Apellido: <input type="text" data-bind="value: lastName" /></p>
+        <p><span data-bind="text: fullName"></span> </p>
+    </div>
+
+    <div class="row jumbotron">
+        <h3>Amigos (<span data-bind="text: friends().length"></span>)</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: friends">
+                <tr>
+                    <td>
+                        <input type="text" data-bind="input: name">
+                        <button data-bind="click: remove">Quitar</button>
+
+                        <label></label><input type="checkbox" data-bind="checked: hasAlias" />Tiene alias</label>
+                        <input type="text" data-bind="value: alias, visible: hasAlias" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <button data-bind="click: addFriend, enable: friends().length < 5">Nuevo amigo</button>
+        <button data-bind="click: save">Guardar</button>
+
+
+    </div>
+
+    <script type="text/javascript">
+        ko.extenders.required = function (target, overrideMessage)
+        {
+            target.hasError = ko.observable();
+            target.validationMessage = ko.observable();
+
+            function validate(newValue)
+            {
+                target.hasError(newValue ? false : true);
+                target.validationMessage(newValue ? "" : overrideMessage || "This field is requiered");
+            }
+
+            validate(target());
+            target.subscribe(validate);
+            return target;
+        };
+
+
+        var friend = function (name)
+        {
+            var viewModelFriend =
+            {
+                name: name,
+                hasAlias: ko.observable(false),
+                alias: ko.observable(),
+                remove: function ()
+                {
+                    viewModelNombre.friends.remove(this);
+                }
+            };
+            return viewModelFriend;
+        };
+
+        var viewModelNombre =
+        {
+            firstName: ko.observable("Ali").extend({ required: "El nombre es requerido."}),
+            lastName: ko.observable("Cruz"),
+            friends: ko.observableArray([new friend("Gabriel"), new friend("Ana")]),
+            addFriend: function ()
+            {
+                this.friends.push(new friend('Nuevo amigo'));
+            },
+            save: function ()
+            {
+                $.ajax({
+                    url: '@Url.Action("Save")',
+                    type: 'POST',
+                    data: ko.toJSON(this),
+                    contentType: 'application/json',
+                    success: function (result) { alert(result.message); }
+                });
+            }
+        };
+
+        viewModelNombre.fullName = ko.dependentObservable(function ()
+        {
+            return this.firstName() + " " + this.lastName();
+        }, viewModelNombre);
+
+        ko.applyBindings(viewModelNombre);
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>https://www.youtube.com/watch?v=XhfPaNTEuTs&t=4s&ab_channel=DrewConley</p>
+<div class="jumbotron">
+    
+</div>
+
+<div id="knockout-app" class="card">
+    <header>
+        Titulo
+    </header>
+    <div class="card-section">
+        <h2>Hello <span data-bind="text: firstName"></span></h2>
+        <p>Numero de pasos</p>
+        <div class="counter-ui-container">
+            <button data-bind="click: decrease">-</button>
+            <span class="counter" data-bind="text: count">0</span>
+            <button data-bind="click: increase">+</button>
+        </div>
+    </div>
+    <p>
+        Tu perro es <span data-bind="text: dogStatus"></span>
+    </p>
+    <footer>
+        <span>Bye</span>
+    </footer>
+</div>
+
+
+<script type="text/javascript">
+    function CounterViewModel()
+    {
+        var self = this;
+        self.firstName = ko.observable("Ali");
+        self.count = ko.observable(0);
+        self.increase = function ()
+        {
+            var currentValue = self.count();
+            self.count(currentValue + 1);
+            console.log("Incremento");
+        }
+
+        self.decrease = function ()
+        {
+            var currentValue = self.count();
+            if (currentValue > 0)
+            {
+                self.count(currentValue - 1);
+                console.log("decrease");
+            }            
+        }
+
+        self.dogStatus = ko.computed(function ()
+        {
+            if (self.count() === 1)
+            {
+                return "UNDERWHELMED";
+            }
+
+            if (self.count() === 2)
+            {
+                return "LISTENING...";
+            }
+
+            if (self.count() >= 3)
+            {
+                return "OK";
+            }
+        });
+
+    }
+
+    ko.applyBindings(new CounterViewModel(), document.querySelector("#knockout-app"));
+
+</script>
